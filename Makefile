@@ -10,6 +10,12 @@ build/master.img: build/boot.bin
 bochs: build/master.img
 	bochs -q
 
+usb: build/boot.bin /dev/sdXX
+	dd if=/dev/sdXX of=build/tmp.bin bs=512 count=1 conv=notrunc
+	dd if=build/boot.bin of=build/tmp.bin bs=446 count=1 conv=notrunc
+	dd if=build/tmp.bin of=/dev/sdXX bs=446 count=1 conv=notrunc
+	rm build/tmp.bin
+
 .PHONY:clean
 clean:
 	rm -rf build
